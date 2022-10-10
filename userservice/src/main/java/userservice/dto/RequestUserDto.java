@@ -1,4 +1,4 @@
-package userservice.vo;
+package userservice.dto;
 
 import lombok.Data;
 
