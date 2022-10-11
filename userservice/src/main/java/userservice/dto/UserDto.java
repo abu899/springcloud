@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Builder
@@ -15,4 +16,6 @@ public class UserDto {
     private String userId;
     private LocalDate createdAt;
     private String encryptedPassword;
+
+    private List<ResponseOrderDto> orders;
 }

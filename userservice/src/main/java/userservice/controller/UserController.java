@@ -6,15 +6,19 @@ import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import userservice.domain.UserEntity;
 import userservice.dto.ResponseUserDto;
 import userservice.dto.UserDto;
 import userservice.service.UserService;
 import userservice.vo.Greeting;
 import userservice.dto.RequestUserDto;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 @Slf4j
-@RequestMapping("/")
+@RequestMapping("/user-service")
 @RequiredArgsConstructor
 public class UserController {
 
@@ -24,7 +28,8 @@ public class UserController {
 
     @GetMapping("/health")
     public String status() {
-        return "User controller health check";
+        String port = env.getProperty("local.server.port");
+        return "User controller health check : " + port;
     }
 
     @GetMapping("/welcome")
@@ -47,6 +52,38 @@ public class UserController {
                 .name(user.getName())
                 .email(user.getEmail())
                 .build();
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/users")
+    public ResponseEntity<List<ResponseUserDto>> getUsers() {
+        List<UserEntity> users = userService.getUsers();
+        List<ResponseUserDto> responses = new ArrayList<>();
+        users.forEach(
+                user -> {
+                    ResponseUserDto responseUserDto = ResponseUserDto.builder()
+                            .email(user.getEmail())
+                            .name(user.getName())
+                            .userId(user.getUserId())
+                            .orders(new ArrayList<>())
+                            .build();
+                    responses.add(responseUserDto);
+                }
+        );
+
+        return ResponseEntity.ok(responses);
+    }
+
+    @GetMapping("/users/{userId}")
+    public ResponseEntity<ResponseUserDto> getUser(@PathVariable("userId") String userId) {
+        UserDto userDto = userService.getUserByUserId(userId);
+        ResponseUserDto response = ResponseUserDto.builder()
+                .email(userDto.getEmail())
+                .userId(userDto.getUserId())
+                .name(userDto.getName())
+                .orders(userDto.getOrders())
+                .build();
+
         return ResponseEntity.ok(response);
     }
 }
