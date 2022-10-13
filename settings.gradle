@@ -4,4 +4,6 @@ include 'userservice'
 include 'gateway'
 include 'firstservice'
 include 'secondservice'
+include 'catalogservice'
+include 'orderservice'
 
