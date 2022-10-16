@@ -1,6 +1,9 @@
 package userservice.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import userservice.domain.UserEntity;
@@ -44,5 +47,13 @@ public class UserServiceImpl implements UserService{
     @Override
     public List<UserEntity> getUsers() {
         return userRepository.findAll();
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        UserEntity user = userRepository.findByEmail(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
+
+        return new User(user.getEmail(), user.getEncryptedPassword(), new ArrayList<>());
     }
 }

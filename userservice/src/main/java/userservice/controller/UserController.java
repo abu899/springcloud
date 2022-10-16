@@ -3,22 +3,21 @@ package userservice.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import userservice.domain.UserEntity;
+import userservice.dto.RequestUserDto;
 import userservice.dto.ResponseUserDto;
 import userservice.dto.UserDto;
 import userservice.service.UserService;
 import userservice.vo.Greeting;
-import userservice.dto.RequestUserDto;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @Slf4j
-@RequestMapping("/user-service")
+//@RequestMapping("/user-service")
 @RequiredArgsConstructor
 public class UserController {
 
