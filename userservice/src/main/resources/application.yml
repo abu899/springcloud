@@ -35,3 +35,7 @@ eureka:
 
 greeting:
   message: Welcome to simple MSA service
+
+token:
+  expiration_time: 86400000
+  secret: user_token_secret
