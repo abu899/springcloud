@@ -1,0 +1,11 @@
+server:
+  port: 8888
+
+spring:
+  application:
+    name: config-service
+  cloud:
+    cofig:
+      server:
+        git:
+          uri: file:///D:/dev/spring_study/springcloud/ecommerce.yml
