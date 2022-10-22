@@ -8,4 +8,4 @@ spring:
     cofig:
       server:
         git:
-          uri: file:///D:/dev/spring_study/springcloud/ecommerce.yml
+          uri: file:///D:/dev/spring_study/springcloud/ecommerce.yml # local git
