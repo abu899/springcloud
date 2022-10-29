@@ -4,11 +4,11 @@ server:
 spring:
   application:
     name: user-service
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+#  datasource:
+#    url: jdbc:h2:mem:testdb
+#    driver-class-name: org.h2.Driver
+#    username: sa
+#    password:
   h2:
     console:
       enabled: true
@@ -36,9 +36,9 @@ eureka:
 greeting:
   message: Welcome to simple MSA service
 
-token:
-  expiration_time: 86400000
-  secret: user_token_secret
+#token:
+#  expiration_time: 86400000
+#  secret: user_token_secret
 
 management:
   endpoints:

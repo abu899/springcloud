@@ -5,7 +5,9 @@ spring:
   application:
     name: config-service
   cloud:
-    cofig:
+    config:
       server:
-        git:
-          uri: file:///D:/dev/spring_study/springcloud/ecommerce.yml # local git
+        native:
+          search-locations: file://${user_home}/Desktop/dev/native-file-repo
+#        git:
+#          uri: file:///D:/dev/spring_study/springcloud/ecommerce.yml # local git
