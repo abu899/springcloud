@@ -22,4 +22,8 @@ public class CatalogEntity implements Serializable {
     private Integer unitPrice;
     @ColumnDefault(value = "CURRENT_TIMESTAMP")
     private LocalDateTime createdAt;
+
+    public void updateStock(Integer quantity) {
+        this.stock -= quantity;
+    }
 }

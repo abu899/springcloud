@@ -5,6 +5,7 @@ import order.domain.OrderEntity;
 import order.dto.OrderDto;
 import order.dto.RequestOrderDto;
 import order.dto.ResponseOrderDto;
+import order.kafka.KafkaProducer;
 import order.service.OrderService;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,7 @@ public class OrderController {
 
     private final Environment env;
     private final OrderService orderService;
+    private final KafkaProducer kafkaProducer;
 
     @GetMapping("/health")
     public String status() {
@@ -46,6 +48,10 @@ public class OrderController {
                 .totalPrice(order.getTotalPrice())
                 .quantity(order.getQuantity())
                 .build();
+
+        // Send order to kafka
+        kafkaProducer.send("example-catalog-topic", orderDto);
+
         return ResponseEntity.ok(response);
     }
 
