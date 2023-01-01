@@ -6,6 +6,7 @@ import order.dto.OrderDto;
 import order.dto.RequestOrderDto;
 import order.dto.ResponseOrderDto;
 import order.kafka.KafkaProducer;
+import order.kafka.OrderProducer;
 import order.service.OrderService;
 import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class OrderController {
     private final Environment env;
     private final OrderService orderService;
     private final KafkaProducer kafkaProducer;
+    private final OrderProducer orderProducer;
 
     @GetMapping("/health")
     public String status() {
@@ -33,24 +36,30 @@ public class OrderController {
     public ResponseEntity<ResponseOrderDto> createOrder(
             @PathVariable("userId")String userId,
             @RequestBody RequestOrderDto requestOrder) {
+
         OrderDto orderDto = OrderDto.builder()
                 .productId(requestOrder.getProductId())
                 .quantity(requestOrder.getQuantity())
                 .unitPrice(requestOrder.getUnitPrice())
                 .userId(userId)
                 .build();
-        OrderDto order = orderService.createOrder(orderDto);
+//        OrderDto order = orderService.createOrder(orderDto);
 
-        ResponseOrderDto response = ResponseOrderDto.builder()
-                .orderId(order.getOrderId())
-                .unitPrice(order.getUnitPrice())
-                .productId(order.getProductId())
-                .totalPrice(order.getTotalPrice())
-                .quantity(order.getQuantity())
-                .build();
+        // kafka
+        orderDto.setOrderId(UUID.randomUUID().toString());
+        orderDto.setTotalPrice(orderDto.getUnitPrice() * orderDto.getQuantity());
 
         // Send order to kafka
+        orderProducer.send("orders", orderDto);
         kafkaProducer.send("example-catalog-topic", orderDto);
+
+        ResponseOrderDto response = ResponseOrderDto.builder()
+                .orderId(orderDto.getOrderId())
+                .unitPrice(orderDto.getUnitPrice())
+                .productId(orderDto.getProductId())
+                .totalPrice(orderDto.getTotalPrice())
+                .quantity(orderDto.getQuantity())
+                .build();
 
         return ResponseEntity.ok(response);
     }
